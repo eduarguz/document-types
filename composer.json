@@ -1,0 +1,46 @@
+{
+    "name": "placetopay/document-types",
+    "description": "Common Document Types",
+    "keywords": [
+        "placetopay",
+        "document-types"
+    ],
+    "homepage": "https://github.com/placetopay/document-types",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Eduardo Guzmán Hernández",
+            "email": "eduardo.guzman@placetopay.com"
+        }
+    ],
+    "require": {
+        "php": "^7.3",
+        "illuminate/support": "^6.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "symfony/var-dumper": "^4.3",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PlacetoPay\\DocumentTypes\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PlacetoPay\\DocumentTypes\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
