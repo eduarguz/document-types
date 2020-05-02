@@ -8,8 +8,6 @@ use Illuminate\Support\Collection;
 
 class CountryGroupedDocumentTypeCollection extends Collection
 {
-    const PRIMARY_KEY = 'country';
-
     /**
      * Get a dictionary keyed by primary keys.
      *
@@ -23,17 +21,17 @@ class CountryGroupedDocumentTypeCollection extends Collection
         $dictionary = [];
 
         foreach ($items as $value) {
-            $dictionary[$value[self::PRIMARY_KEY]] = $value;
+            $dictionary[$value->getKey()] = $value;
         }
 
         return $dictionary;
     }
 
-    public function putFirst(string $country)
+    public function putFirst(string $key)
     {
         $items = $this
-            ->sortBy(function (array $group) use ($country) {
-                return $group['country'] === $country ? 1 : 2;
+            ->sortBy(function (DocumentTypesByCountry $group) use ($key) {
+                return $group->getKey() === $key ? 1 : 2;
             })
             ->values();
 
@@ -54,8 +52,8 @@ class CountryGroupedDocumentTypeCollection extends Collection
             return parent::contains(...func_get_args());
         }
 
-        return parent::contains(function (array $item) use ($key) {
-            return $item[self::PRIMARY_KEY] === $key;
+        return parent::contains(function (DocumentTypesByCountry $item) use ($key) {
+            return $item->getKey() === $key;
         });
     }
 

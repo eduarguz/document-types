@@ -9,34 +9,42 @@ class DocumentTypesDataProvider
             'code' => 'CC',
             'country' => 'CO',
             'pattern' => '/^[1-9][0-9]{4,9}$/',
-            'javascript_pattern' => '',
-            'is_business' => false,
+            'javascriptPattern' => '',
+            'isBusiness' => false,
         ],
         [
             'code' => 'TI',
             'country' => 'CO',
             'pattern' => '/^[1-9][0-9]{4,11}$/',
-            'javascript_pattern' => '',
-            'is_business' => false,
+            'javascriptPattern' => '',
+            'isBusiness' => false,
         ],
         [
             'code' => 'DNI',
             'country' => 'US',
             'pattern' => '/^[1-9][0-9]{4,11}$/',
-            'javascript_pattern' => '',
-            'is_business' => false,
+            'javascriptPattern' => '',
+            'isBusiness' => false,
         ],
         [
             'code' => 'PPN',
             'country' => 'EC',
             'pattern' => '/^[1-9][0-9]{4,11}$/',
-            'javascript_pattern' => '',
-            'is_business' => false,
+            'javascriptPattern' => '',
+            'isBusiness' => false,
         ],
     ];
 
     public function all()
     {
-        return $this->documentTypes;
+        return array_map(function (array $item) {
+            return new DocumentType(
+                $item['code'],
+                $item['country'],
+                $item['pattern'],
+                $item['javascriptPattern'],
+                $item['isBusiness'],
+            );
+        }, $this->documentTypes);
     }
 }

@@ -8,8 +8,6 @@ use Illuminate\Support\Collection;
 
 class DocumentTypeCollection extends Collection
 {
-    const PRIMARY_KEY = 'code';
-
     /**
      * self constructor
      * @return \PlacetoPay\DocumentTypes\DocumentTypeCollection
@@ -32,7 +30,7 @@ class DocumentTypeCollection extends Collection
         $dictionary = [];
 
         foreach ($items as $value) {
-            $dictionary[$value[self::PRIMARY_KEY]] = $value;
+            $dictionary[$value->getKey()] = $value;
         }
 
         return $dictionary;
@@ -52,8 +50,8 @@ class DocumentTypeCollection extends Collection
             return parent::contains(...func_get_args());
         }
 
-        return parent::contains(function (array $documentType) use ($key) {
-            return $documentType[self::PRIMARY_KEY] === $key;
+        return parent::contains(function (HasPrimaryKey $item) use ($key) {
+            return $item->getKey() === $key;
         });
     }
 
@@ -95,7 +93,7 @@ class DocumentTypeCollection extends Collection
         return new CountryGroupedDocumentTypeCollection(
             $this->groupBy('country')
                 ->map(function (DocumentTypeCollection $documentTypes, string $country){
-                    return ['country' => $country, 'documentTypes' => $documentTypes];
+                    return new DocumentTypesByCountry($country, $documentTypes);
                 })
                 ->values()
         );
@@ -142,6 +140,10 @@ class DocumentTypeCollection extends Collection
      */
     public function find($key, $default = null)
     {
+        if ($key instanceof HasPrimaryKey) {
+            $key = $key->getKey();
+        }
+
         if ($key instanceof Arrayable) {
             $key = $key->toArray();
         }
@@ -151,11 +153,11 @@ class DocumentTypeCollection extends Collection
                 return new static;
             }
 
-            return $this->whereIn(self::PRIMARY_KEY, $key);
+            return $this->whereIn($this->first()->getKeyName(), $key);
         }
 
-        return Arr::first($this->items, function ($item) use ($key) {
-            return $item[self::PRIMARY_KEY] == $key;
+        return Arr::first($this->items, function (HasPrimaryKey $item) use ($key) {
+            return $item->getKey() == $key;
         }, $default);
     }
 }

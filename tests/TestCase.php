@@ -3,6 +3,7 @@
 namespace PlacetoPay\DocumentTypes\Tests;
 
 use PlacetoPay\DocumentTypes\CountryGroupedDocumentTypeCollection;
+use PlacetoPay\DocumentTypes\DocumentType;
 use PlacetoPay\DocumentTypes\DocumentTypeCollection;
 
 class TestCase extends \PHPUnit\Framework\TestCase
@@ -11,9 +12,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
     public function can_create_collection()
     {
         $collection = DocumentTypeCollection::create();
+        $this->assertNotEmpty($collection);
         $this->assertInstanceOf(DocumentTypeCollection::class, $collection);
-        $this->assertIsArray($collection->all());
-        $this->assertNotEmpty($collection->all());
+        $this->assertContainsOnlyInstancesOf(DocumentType::class, $collection);
     }
 
     /** @test **/
@@ -22,11 +23,12 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->assertTrue(DocumentTypeCollection::create()->contains('CC'));
         $this->assertFalse(DocumentTypeCollection::create()->contains('XX'));
 
-        $this->assertTrue(DocumentTypeCollection::create()->contains(function (array $documentType) {
-            return $documentType['code'] === 'CC';
+        $this->assertTrue(DocumentTypeCollection::create()->contains(function (DocumentType $documentType) {
+            return $documentType->getCode() === 'CC';
         }));
-        $this->assertFalse(DocumentTypeCollection::create()->contains(function (array $documentType) {
-            return $documentType['code'] === 'XX';
+
+        $this->assertFalse(DocumentTypeCollection::create()->contains(function (DocumentType $documentType) {
+            return $documentType->getCode() === 'XX';
         }));
 
         $this->assertFalse(DocumentTypeCollection::create()->contains('code', 'XX'));
@@ -99,10 +101,10 @@ class TestCase extends \PHPUnit\Framework\TestCase
     public function can_set_a_country_first()
     {
         $result = DocumentTypeCollection::create()->groupByCountry()->putFirst('US');
-        $this->assertEquals('US', $result[0]['country']);
+        $this->assertEquals('US', $result->first()->getCountry());
 
         $result = DocumentTypeCollection::create()->groupByCountry()->putFirst('CO');
-        $this->assertEquals('CO', $result[0]['country']);
+        $this->assertEquals('CO', $result->first()->getCountry());
     }
 
     /** @test **/
