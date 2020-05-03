@@ -64,7 +64,6 @@ abstract class CollectionWithPrimaryKeys extends Collection
         return new static(array_values($dictionary));
     }
 
-
     /**
      * Returns all models in the collection except the models with specified keys.
      *

@@ -5,17 +5,17 @@ namespace PlacetoPay\DocumentTypes\Collection;
 use Illuminate\Support\Collection;
 use PlacetoPay\DocumentTypes\Collection\CollectionWithPrimaryKeys;
 use PlacetoPay\DocumentTypes\Collection\DocumentTypesByCountryCollection;
-use PlacetoPay\DocumentTypes\Entities\DocumentTypesByCountry;
 use PlacetoPay\DocumentTypes\DocumentTypesData;
+use PlacetoPay\DocumentTypes\Entities\DocumentTypesByCountry;
 
 class DocumentTypeCollection extends CollectionWithPrimaryKeys
 {
     /**
-     * Create a new instance using a known data provider
+     * Create a new instance using a known data provider.
      *
      * @return \PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection
      */
-    public static function create(): DocumentTypeCollection
+    public static function create(): self
     {
         return new self((new DocumentTypesData())->all());
     }
@@ -29,7 +29,7 @@ class DocumentTypeCollection extends CollectionWithPrimaryKeys
     {
         $items = $this
             ->groupBy('country')
-            ->map(function (DocumentTypeCollection $documentTypes, string $country){
+            ->map(function (self $documentTypes, string $country) {
                 return new DocumentTypesByCountry($country, $documentTypes);
             })
             ->values();
@@ -43,7 +43,7 @@ class DocumentTypeCollection extends CollectionWithPrimaryKeys
      * @param $keys
      * @return \PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection
      */
-    public function exceptByCountry($keys): DocumentTypeCollection
+    public function exceptByCountry($keys): self
     {
         $response = $this->groupByCountry()
             ->except($keys)
@@ -59,7 +59,7 @@ class DocumentTypeCollection extends CollectionWithPrimaryKeys
      * @param mixed $keys
      * @return \PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection
      */
-    public function onlyByCountry($keys): DocumentTypeCollection
+    public function onlyByCountry($keys): self
     {
         $response = $this->groupByCountry()
             ->only($keys)

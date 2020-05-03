@@ -16,7 +16,7 @@ class Document
 
     public function __construct(string $document, DocumentType $documentType)
     {
-        if (!$documentType->validate($document)){
+        if (! $documentType->validate($document)) {
             throw new \DomainException(
                 sprintf('Document "%s" does not pass validation against DocumentType "%s"', $document, $documentType->getCode())
             );

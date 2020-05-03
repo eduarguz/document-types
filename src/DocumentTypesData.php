@@ -11,7 +11,7 @@ class DocumentTypesData
     const KEY_CODE = 'code';
 
     /**
-     * Document Types Library
+     * Document Types Library.
      * @var array[]
      */
     private $documentTypes = [
@@ -130,7 +130,7 @@ class DocumentTypesData
     ];
 
     /**
-     * Maps document types into DocumentType Class
+     * Maps document types into DocumentType Class.
      *
      * @return \PlacetoPay\DocumentTypes\Entities\DocumentType[]
      */
@@ -150,6 +150,7 @@ class DocumentTypesData
     public static function fromCode(string $code)
     {
         $item = (new static())->lookup($code);
+
         return new DocumentType(
             $item['code'],
             $item['country'],

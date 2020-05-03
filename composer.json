@@ -21,7 +21,8 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
         "symfony/var-dumper": "^4.3",
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^9.0",
+        "eduardogh/shift-php-cs": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -41,6 +42,12 @@
     "config": {
         "sort-packages": true
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/eduarguz/shift-php-cs"
+        }
+    ],
     "minimum-stability": "dev",
     "prefer-stable": true
 }

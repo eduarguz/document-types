@@ -6,7 +6,7 @@ use PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection;
 use PlacetoPay\DocumentTypes\Support\HasPrimaryKey;
 use PlacetoPay\DocumentTypes\Support\ImmutableObjectAsArrayAccess;
 
-class DocumentTypesByCountry implements  HasPrimaryKey, \ArrayAccess
+class DocumentTypesByCountry implements HasPrimaryKey, \ArrayAccess
 {
     use ImmutableObjectAsArrayAccess;
 

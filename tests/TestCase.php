@@ -2,12 +2,12 @@
 
 namespace PlacetoPay\DocumentTypes\Tests;
 
+use PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection;
 use PlacetoPay\DocumentTypes\Collection\DocumentTypesByCountryCollection;
 use PlacetoPay\DocumentTypes\DocumentTypeFactory;
 use PlacetoPay\DocumentTypes\DocumentTypesData;
 use PlacetoPay\DocumentTypes\DocumentValidator;
 use PlacetoPay\DocumentTypes\Entities\DocumentType;
-use PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
@@ -128,7 +128,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $result = DocumentTypeCollection::create()->groupByCountry()->only('US');
         $this->assertTrue($result->contains('US'));
         $this->assertCount(1, $result);
-
 
         $result = DocumentTypeCollection::create()->groupByCountry()->only(['CO', 'US']);
         $this->assertTrue($result->contains('US'));

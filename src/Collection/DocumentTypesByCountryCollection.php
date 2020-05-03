@@ -15,7 +15,7 @@ class DocumentTypesByCountryCollection extends CollectionWithPrimaryKeys
      * @param string $key
      * @return \PlacetoPay\DocumentTypes\Collection\DocumentTypesByCountryCollection
      */
-    public function putFirst(string $key): DocumentTypesByCountryCollection
+    public function putFirst(string $key): self
     {
         $items = $this
             ->sortBy(function (DocumentTypesByCountry $group) use ($key) {

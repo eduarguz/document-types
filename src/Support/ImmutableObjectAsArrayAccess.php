@@ -30,7 +30,7 @@ trait ImmutableObjectAsArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        throw new RuntimeException('Attempt to mutate immutable ' . __CLASS__ . ' object.');
+        throw new RuntimeException('Attempt to mutate immutable '.__CLASS__.' object.');
     }
 
     /**
@@ -38,6 +38,6 @@ trait ImmutableObjectAsArrayAccess
      */
     public function offsetUnset($offset)
     {
-        throw new RuntimeException('Attempt to mutate immutable ' . __CLASS__ . ' object.');
+        throw new RuntimeException('Attempt to mutate immutable '.__CLASS__.' object.');
     }
 }
