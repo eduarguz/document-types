@@ -3,12 +3,15 @@
 namespace PlacetoPay\DocumentTypes\Tests;
 
 use PlacetoPay\DocumentTypes\Collection\DocumentTypesByCountryCollection;
+use PlacetoPay\DocumentTypes\DocumentTypeFactory;
+use PlacetoPay\DocumentTypes\DocumentTypesData;
+use PlacetoPay\DocumentTypes\DocumentValidator;
 use PlacetoPay\DocumentTypes\Entities\DocumentType;
 use PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
-    /** @test **/
+    /** @test * */
     public function can_create_collection()
     {
         $collection = DocumentTypeCollection::create();
@@ -17,7 +20,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->assertContainsOnlyInstancesOf(DocumentType::class, $collection);
     }
 
-    /** @test **/
+    /** @test * */
     public function checks_if_collection_contains_an_item()
     {
         $this->assertTrue(DocumentTypeCollection::create()->contains('CC'));
@@ -38,7 +41,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->assertTrue(DocumentTypeCollection::create()->contains('code', '==', 'CC'));
     }
 
-    /** @test **/
+    /** @test * */
     public function can_remove_items_by_country_code()
     {
         $result = DocumentTypeCollection::create()->exceptByCountry('CO');
@@ -51,7 +54,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->assertTrue($result->contains('PPN'));
     }
 
-    /** @test **/
+    /** @test * */
     public function can_select_items_by_country_code()
     {
         $result = DocumentTypeCollection::create()->onlyByCountry('CO');
@@ -64,7 +67,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result->contains('PPN'));
     }
 
-    /** @test **/
+    /** @test * */
     public function can_select_items_by_code()
     {
         $result = DocumentTypeCollection::create()->only('CC');
@@ -77,7 +80,19 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->assertCount(2, $result);
     }
 
-    /** @test **/
+    /** @test * */
+    public function can_select_items_by_business()
+    {
+        $result = DocumentTypeCollection::create()->onlyBusiness();
+        $this->assertTrue($result->contains('NIT'));
+        $this->assertFalse($result->contains('CC'));
+
+        $result = DocumentTypeCollection::create()->onlyNotBusiness();
+        $this->assertFalse($result->contains('NIT'));
+        $this->assertTrue($result->contains('CC'));
+    }
+
+    /** @test * */
     public function can_find_items()
     {
         $result = DocumentTypeCollection::create()->find('CC');
@@ -89,7 +104,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->assertCount(2, $result);
     }
 
-    /** @test **/
+    /** @test * */
     public function can_group_by_country()
     {
         $result = DocumentTypeCollection::create()->groupByCountry();
@@ -97,7 +112,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty($result);
     }
 
-    /** @test **/
+    /** @test * */
     public function can_set_a_country_first()
     {
         $result = DocumentTypeCollection::create()->groupByCountry()->putFirst('US');
@@ -107,7 +122,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->assertEquals('CO', $result->first()->getCountry());
     }
 
-    /** @test **/
+    /** @test * */
     public function can_select_items_by_country_code_in_documents()
     {
         $result = DocumentTypeCollection::create()->groupByCountry()->only('US');
@@ -121,7 +136,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->assertCount(2, $result);
     }
 
-    /** @test **/
+    /** @test * */
     public function can_exclude_items_by_country_code()
     {
         $result = DocumentTypeCollection::create()->groupByCountry()->except('US');
@@ -131,5 +146,24 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $result = DocumentTypeCollection::create()->groupByCountry()->except(['CO', 'US']);
         $this->assertFalse($result->contains('US'));
         $this->assertFalse($result->contains('CO'));
+    }
+
+    /** @test * */
+    public function can_create_document_type_from_code()
+    {
+        $documentType = DocumentTypesData::fromCode('CC');
+
+        $this->assertInstanceOf(DocumentType::class, $documentType);
+        $this->assertEquals('CC', $documentType->getCode());
+    }
+
+    /** @test **/
+    public function can_validate_if_document_type_is_valid()
+    {
+        $this->assertTrue((new DocumentValidator())->isTypeValid('CC'));
+        $this->assertFalse((new DocumentValidator())->isTypeValid('XX'));
+
+        $this->assertTrue((new DocumentValidator())->isValid('123456789', 'CC'));
+        $this->assertFalse((new DocumentValidator())->isValid('190', 'CC'));
     }
 }

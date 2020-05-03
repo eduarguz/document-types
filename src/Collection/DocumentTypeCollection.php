@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 use PlacetoPay\DocumentTypes\Collection\CollectionWithPrimaryKeys;
 use PlacetoPay\DocumentTypes\Collection\DocumentTypesByCountryCollection;
 use PlacetoPay\DocumentTypes\Entities\DocumentTypesByCountry;
-use PlacetoPay\DocumentTypes\DocumentTypesDataProvider;
+use PlacetoPay\DocumentTypes\DocumentTypesData;
 
 class DocumentTypeCollection extends CollectionWithPrimaryKeys
 {
@@ -17,7 +17,7 @@ class DocumentTypeCollection extends CollectionWithPrimaryKeys
      */
     public static function create(): DocumentTypeCollection
     {
-        return new self((new DocumentTypesDataProvider())->all());
+        return new self((new DocumentTypesData())->all());
     }
 
     /**
@@ -67,5 +67,26 @@ class DocumentTypeCollection extends CollectionWithPrimaryKeys
             ->flatten(1);
 
         return new static(array_values($response->all()));
+    }
+
+    /**
+     * Return only the documents that are for businesses.
+     *
+     * @param bool $value
+     * @return \PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection
+     */
+    public function onlyBusiness($value = true)
+    {
+        return $this->where('isBusiness', $value);
+    }
+
+    /**
+     * Return only the documents that are not for businesses.
+     *
+     * @return \PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection
+     */
+    public function onlyNotBusiness()
+    {
+        return $this->onlyBusiness(false);
     }
 }
