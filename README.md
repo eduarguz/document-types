@@ -1,7 +1,7 @@
 # What Can I DO
 
 ```php
-use PlacetoPay\DocumentTypes\DocumentTypeCollection;
+use PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection;
     
 $documentTypes = DocumentTypeCollection::create();
 

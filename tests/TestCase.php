@@ -2,9 +2,9 @@
 
 namespace PlacetoPay\DocumentTypes\Tests;
 
-use PlacetoPay\DocumentTypes\CountryGroupedDocumentTypeCollection;
-use PlacetoPay\DocumentTypes\DocumentType;
-use PlacetoPay\DocumentTypes\DocumentTypeCollection;
+use PlacetoPay\DocumentTypes\Collection\DocumentTypesByCountryCollection;
+use PlacetoPay\DocumentTypes\Entities\DocumentType;
+use PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
@@ -47,7 +47,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
         $result = DocumentTypeCollection::create()->exceptByCountry(['CO', 'US']);
         $this->assertFalse($result->contains('CC'));
-        $this->assertFalse($result->contains('DNI'));
+        $this->assertFalse($result->contains('SSN'));
         $this->assertTrue($result->contains('PPN'));
     }
 
@@ -60,7 +60,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
         $result = DocumentTypeCollection::create()->onlyByCountry(['CO', 'US']);
         $this->assertTrue($result->contains('CC'));
-        $this->assertTrue($result->contains('DNI'));
+        $this->assertTrue($result->contains('SSN'));
         $this->assertFalse($result->contains('PPN'));
     }
 
@@ -93,8 +93,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
     public function can_group_by_country()
     {
         $result = DocumentTypeCollection::create()->groupByCountry();
-        $this->assertInstanceOf(CountryGroupedDocumentTypeCollection::class, $result);
-        $this->assertCount(3, $result);
+        $this->assertInstanceOf(DocumentTypesByCountryCollection::class, $result);
+        $this->assertNotEmpty($result);
     }
 
     /** @test **/

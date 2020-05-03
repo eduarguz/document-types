@@ -1,6 +1,9 @@
 <?php
 
-namespace PlacetoPay\DocumentTypes;
+namespace PlacetoPay\DocumentTypes\Entities;
+
+use PlacetoPay\DocumentTypes\Support\HasPrimaryKey;
+use PlacetoPay\DocumentTypes\Support\ImmutableObjectAsArrayAccess;
 
 class DocumentType implements HasPrimaryKey, \ArrayAccess
 {

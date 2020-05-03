@@ -1,6 +1,10 @@
 <?php
 
-namespace PlacetoPay\DocumentTypes;
+namespace PlacetoPay\DocumentTypes\Entities;
+
+use PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection;
+use PlacetoPay\DocumentTypes\Support\HasPrimaryKey;
+use PlacetoPay\DocumentTypes\Support\ImmutableObjectAsArrayAccess;
 
 class DocumentTypesByCountry implements  HasPrimaryKey, \ArrayAccess
 {
@@ -12,14 +16,14 @@ class DocumentTypesByCountry implements  HasPrimaryKey, \ArrayAccess
     private $country;
 
     /**
-     * @var \PlacetoPay\DocumentTypes\DocumentTypeCollection
+     * @var \PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection
      */
     private $documentTypes;
 
     /**
      * DocumentTypesByCountry constructor.
      * @param string $country
-     * @param \PlacetoPay\DocumentTypes\DocumentTypeCollection $documentTypes
+     * @param \PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection $documentTypes
      */
     public function __construct(string $country, DocumentTypeCollection $documentTypes)
     {
@@ -27,11 +31,17 @@ class DocumentTypesByCountry implements  HasPrimaryKey, \ArrayAccess
         $this->documentTypes = $documentTypes;
     }
 
+    /**
+     * @return string
+     */
     public function getKey()
     {
         return $this->getCountry();
     }
 
+    /**
+     * @return string
+     */
     public function getKeyName(): string
     {
         return 'country';
@@ -43,5 +53,13 @@ class DocumentTypesByCountry implements  HasPrimaryKey, \ArrayAccess
     public function getCountry(): string
     {
         return $this->country;
+    }
+
+    /**
+     * @return \PlacetoPay\DocumentTypes\Collection\DocumentTypeCollection
+     */
+    public function getDocumentTypes(): DocumentTypeCollection
+    {
+        return $this->documentTypes;
     }
 }
